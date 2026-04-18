@@ -6,70 +6,75 @@
     <title>First App</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h2>Enter Your Name:</h2>
-    <input type="text" id="nameInput"/>
-    <button onclick="sayHello()">Click Me</button>
-    <p id="result"></p>
-    <ul id="nameList"></ul>
-    <script>
-        let names= JSON.parse(localStorage.getItem("names")) || [];
-        renderList();
-        names.forEach(function(name){
-            let li = document.createElement("li");
-            li.innerText = name;
 
-            let deleteBtn = document.createElement("button");
-            deleteBtn.innerText = "Delete";
+    <div class="app">
 
-            deleteBtn.onclick = function (){
-                li.remove();
+        <h2>Enter Your Name</h2>
 
-                names= names.filter(function(n){
-                    return n !==name;
-                });
-                localStorage.setItem("names", JSON.stringify(names));
-            };
-            li.appendChild(deleteBtn);
-            document.getElementById("nameList").appendChild(li);
-        });
-        function renderList(){
-            let nameList = document.getElementById("nameList");
-            nameList.innerHTML = "";
-            names.forEach(function(name){
-                let li = document.createElement("li");
-                li.innerText = name + " ";
+        <div class="input-area">
+            <input type="text" id="nameInput" placeholder="Type your name..."/>
+            <button onclick="sayHello()">Add</button>
+        </div>
 
-                let deleteBtn = document.createElement("button");
-                deleteBtn.innerText = "Delete";
+        <p id="result"></p>
 
-                deleteBtn.onclick = function (){
-                    li.remove();
+        <ul id="nameList"></ul>
 
-                    names= names.filter(function(n){
-                        return n !==name;
-                    });
-                    localStorage.setItem("names", JSON.stringify(names));
-                    renderList();
-                };
-                li.appendChild(deleteBtn);
-                nameList.appendChild(li);
-            });
-        }
-        function sayHello(){
-           let input = document.getElementById("nameInput");
-           let name = input.value;
+    </div>
 
-           if (name ===""){
-            alert ("please enter your name");
-            return;
+<script>
+let names = JSON.parse(localStorage.getItem("names")) || [];
 
-           }
-           names.push(name);
-           localStorage.setItem("names", JSON.stringify(names));
-           document.getElementById("result").innerText ="Hello " + name;
+const nameInput = document.getElementById("nameInput");
+const nameList = document.getElementById("nameList");
+const result = document.getElementById("result");
+
+renderList();
+
+function sayHello() {
+    let name = nameInput.value.trim();
+
+    if (name === "") {
+        alert("Please enter your name");
+        return;
+    }
+
+    names.push(name);
+    saveData();
+
+    result.innerText = "Hello " + name;
+    nameInput.value = "";
+
+    renderList();
+}
+
+function renderList() {
+    nameList.innerHTML = "";
+
+    names.forEach((name, index) => {
+        let li = document.createElement("li");
+        li.innerText = name;
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Delete";
+
+        deleteBtn.onclick = () => {
+            names.splice(index, 1);
+            saveData();
             renderList();
-        }
-    </script>
+        };
+
+        li.appendChild(deleteBtn);
+        nameList.appendChild(li);
+    });
+}
+
+function saveData() {
+    localStorage.setItem("names", JSON.stringify(names));
+}
+</script>
+
 </body>
 </html>
