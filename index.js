@@ -13,17 +13,6 @@ else{
 console.log("my name is"+" "+name);
 console.log("i am "+" "+age +" "+"years old");
 
-
-// let names = ['Maya','john','Sarah'];
-// for (let i=0;i<names.length;i++){
-//     if(names[i][0]==='M'){
-//     console.log(names[i]);
-//     }
-// }
-// function sayHello(name){
-//     console.log("Hello"+" "+ name);
-// }
-
 sayHello("Maya");
 sayHello("John");
 

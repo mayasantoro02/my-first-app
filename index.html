@@ -12,7 +12,49 @@
     <p id="result"></p>
     <ul id="nameList"></ul>
     <script>
-        let names= [];
+        let names= JSON.parse(localStorage.getItem("names")) || [];
+        renderList();
+        names.forEach(function(name){
+            let li = document.createElement("li");
+            li.innerText = name;
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "Delete";
+
+            deleteBtn.onclick = function (){
+                li.remove();
+
+                names= names.filter(function(n){
+                    return n !==name;
+                });
+                localStorage.setItem("names", JSON.stringify(names));
+            };
+            li.appendChild(deleteBtn);
+            document.getElementById("nameList").appendChild(li);
+        });
+        function renderList(){
+            let nameList = document.getElementById("nameList");
+            nameList.innerHTML = "";
+            names.forEach(function(name){
+                let li = document.createElement("li");
+                li.innerText = name + " ";
+
+                let deleteBtn = document.createElement("button");
+                deleteBtn.innerText = "Delete";
+
+                deleteBtn.onclick = function (){
+                    li.remove();
+
+                    names= names.filter(function(n){
+                        return n !==name;
+                    });
+                    localStorage.setItem("names", JSON.stringify(names));
+                    renderList();
+                };
+                li.appendChild(deleteBtn);
+                nameList.appendChild(li);
+            });
+        }
         function sayHello(){
            let input = document.getElementById("nameInput");
            let name = input.value;
@@ -23,11 +65,9 @@
 
            }
            names.push(name);
+           localStorage.setItem("names", JSON.stringify(names));
            document.getElementById("result").innerText ="Hello " + name;
-            let li = document.createElement("li");
-            li.innerText = name;
-            document.getElementById("nameList").appendChild(li);
-             input.value = "";
+            renderList();
         }
     </script>
 </body>
